@@ -198,13 +198,12 @@ a {
   -webkit-transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
   border-bottom: dotted 1px;
-  color: #49bf9d;
+  color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
 }
 
 a:hover {
   border-bottom-color: transparent;
-  color: #49bf9d !important;
   text-decoration: none;
 }
 
@@ -1934,6 +1933,10 @@ input[type="radio"] + label:before {
 
 .icon > .label {
   display: none;
+}
+
+.icon:hover {
+  color: #fff !important;
 }
 
 /* Image */
