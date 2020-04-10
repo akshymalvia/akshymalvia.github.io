@@ -1936,7 +1936,7 @@ input[type="radio"] + label:before {
 }
 
 .icon:hover {
-  color: #fff !important;
+  color: #fff;
 }
 
 /* Image */
@@ -2133,6 +2133,10 @@ ul.labeled-icons li h3 {
   text-align: center;
   top: 0;
   width: 1em;
+}
+
+ul.labeled-icons li .icon:hover {
+  color: #b2b2b2;
 }
 
 /* Actions */
@@ -2545,6 +2549,10 @@ input[type="button"]:disabled,
 
 #footer .icons a {
   color: rgba(255, 255, 255, 0.4);
+}
+
+#footer .icons a:hover {
+  color: #ffffff;
 }
 
 #footer .copyright {

@@ -22,24 +22,24 @@ $size-header-pad: 4em;
   (
     xlarge: (
       1281px,
-      1800px
+      1800px,
     ),
     large: (
       981px,
-      1280px
+      1280px,
     ),
     medium: (
       737px,
-      980px
+      980px,
     ),
     small: (
       481px,
-      736px
+      736px,
     ),
     xsmall: (
       null,
-      480px
-    )
+      480px,
+    ),
   )
 );
 
@@ -692,7 +692,7 @@ input[type="radio"] {
   }
 
   &:hover {
-    color: _palette(bg) !important;
+    color: _palette(bg);
   }
 }
 
@@ -901,6 +901,10 @@ ul.labeled-icons {
       text-align: center;
       top: 0;
       width: 1em;
+    }
+
+    .icon:hover {
+      color: _palette(fg-light);
     }
   }
 }
@@ -1252,6 +1256,10 @@ input[type="button"],
 
     a {
       color: _palette(accent2, fg-light);
+
+      &:hover {
+        color: _palette(accent2, fg-bold);
+      }
     }
   }
 
