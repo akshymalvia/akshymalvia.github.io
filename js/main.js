@@ -1,115 +1,60 @@
 /*
-  Strata by HTML5 UP
-  html5up.net | @ajlkn
-  Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+  Personal resume — Akshay Malviya
+  Cursor glow, scroll-spy nav, reveal-on-scroll. No dependencies.
 */
 
-(function($) {
-  const $window = $(window);
+(() => {
+  'use strict';
 
-  const $body = $('body');
-
-  const $header = $('#header');
-
-  const $footer = $('#footer');
-
-  const $main = $('#main');
-
-  const settings = {
-    // Parallax background effect?
-    parallax: false,
-
-    // Parallax factor (lower = more intense, higher = less intense).
-    parallaxFactor: 20
-  };
-
-  // Breakpoints.
-  breakpoints({
-    xlarge: ['1281px', '1800px'],
-    large: ['981px', '1280px'],
-    medium: ['737px', '980px'],
-    small: ['481px', '736px'],
-    xsmall: [null, '480px']
-  });
-
-  // Play initial animations on page load.
-  $window.on('load', function() {
-    window.setTimeout(function() {
-      $body.removeClass('is-preload');
-    }, 100);
-  });
-
-  // Touch?
-  if (browser.mobile) {
-    // Turn on touch mode.
-    $body.addClass('is-touch');
-
-    // Height fix (mostly for iOS).
-    window.setTimeout(function() {
-      $window.scrollTop($window.scrollTop() + 1);
-    }, 0);
-  }
-
-  // Footer.
-  breakpoints.on('<=medium', function() {
-    $footer.insertAfter($main);
-  });
-
-  breakpoints.on('>medium', function() {
-    $footer.appendTo($header);
-  });
-
-  // Header.
-
-  // Parallax background.
-
-  // Disable parallax on IE (smooth scrolling is jerky), and on mobile platforms (= better performance).
-  if (browser.name == 'ie' || browser.mobile) {
-    settings.parallax = false;
-  }
-
-  if (settings.parallax) {
-    breakpoints.on('<=medium', function() {
-      $window.off('scroll.strata_parallax');
-      $header.css('background-position', '');
+  // Cursor-following glow (pointer devices only)
+  const glow = document.querySelector('.glow');
+  if (glow && window.matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('mousemove', (event) => {
+      glow.style.setProperty('--x', `${event.clientX}px`);
+      glow.style.setProperty('--y', `${event.clientY}px`);
     });
+  }
 
-    breakpoints.on('>medium', function() {
-      $header.css('background-position', 'left 0px');
+  // Scroll-spy: highlight the nav link of the section in view
+  const navLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
+  const sections = navLinks.map((link) => document.querySelector(link.hash)).filter(Boolean);
 
-      $window.on('scroll.strata_parallax', function() {
-        $header.css(
-          'background-position',
-          'left ' +
-            -1 * (parseInt($window.scrollTop()) / settings.parallaxFactor) +
-            'px'
-        );
+  if (sections.length) {
+    const setActive = (id) => {
+      navLinks.forEach((link) => {
+        link.classList.toggle('active', link.hash === `#${id}`);
       });
-    });
+    };
 
-    $window.on('load', function() {
-      $window.triggerHandler('scroll');
-    });
+    const spy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: '-30% 0px -60% 0px' }
+    );
+
+    sections.forEach((section) => spy.observe(section));
   }
 
-  // Main Sections: Two.
+  // Reveal sections as they enter the viewport
+  const revealables = document.querySelectorAll('.reveal');
+  const reveal = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
 
-  // Lightbox gallery.
-  $window.on('load', function() {
-    $('#two').poptrox({
-      caption: function($a) {
-        return $a.next('h3').text();
-      },
-      overlayColor: '#2c2c2c',
-      overlayOpacity: 0.85,
-      popupCloserText: '',
-      popupLoaderText: '',
-      selector: '.work-item a.image',
-      usePopupCaption: true,
-      usePopupDefaultStyling: false,
-      usePopupEasyClose: false,
-      usePopupNav: true,
-      windowMargin: breakpoints.active('<=small') ? 0 : 50
-    });
-  });
-})(jQuery);
+  revealables.forEach((element) => reveal.observe(element));
+
+  // Keep the footer year current
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
+})();
